@@ -87,32 +87,40 @@ void turn_example() {
 ///
 // Combining Turn + Drive
 ///
-void RedFront() {
+void RedRight() {
   // Set the current physical direction of the robot to be evaluated as 90 degrees
   chassis.imu.set_heading(90); 
+  claw.set(true);
   chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  lift.move_absolute(2416, 110);
-  chassis.pid_drive_set(15_in, DRIVE_SPEED, true);
+  lift.move_absolute(800, 110);
+  chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
   chassis.pid_wait_quick_chain();
-  claw.set(true);
-  pros::delay(1000);
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED, true);
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  lift.move_absolute(0,110);
-  chassis.pid_turn_set(285_deg, TURN_SPEED);
-  chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(15_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(7.5_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-  pros::delay(500);
   claw.set(false);
   pros::delay(500);
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(-4_in, DRIVE_SPEED, true);
   chassis.pid_wait_quick_chain();
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  lift.move_absolute(0,110);
+  chassis.pid_turn_set(225_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
   chassis.pid_drive_set(15_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(180_deg,TURN_SPEED);
   chassis.pid_wait();
+  chassis.pid_drive_set(0.5_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  claw.set(true);
+  lift.move_absolute(1000, 110);
+  chassis.pid_turn_set(225_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(-15_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(270_deg, TURN_SPEED);
+  claw.set(false);
   
 
 }
