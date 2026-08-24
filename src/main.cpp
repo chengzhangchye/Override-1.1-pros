@@ -215,6 +215,13 @@ void ez_template_extras() {
       chassis.drive_brake_set(preference);
     }
 
+    if (pros::lcd::read_buttons() & LCD_BTN_CENTER) {
+        
+        // Triggers and runs the currently displayed/selected autonomous routine
+        pros::delay(3000);
+        autonomous(); 
+      }
+
     // Allow PID Tuner to iterate
     chassis.pid_tuner_iterate();
   }
@@ -243,6 +250,7 @@ void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
   toggle.move_relative(180, 110);
+
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
