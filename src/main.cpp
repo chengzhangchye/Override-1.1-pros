@@ -11,7 +11,7 @@ ez::Drive chassis(
     {12, -16},     // Left Chassis Ports (negative port will reverse it!)
     {7, -1},  // Right Chassis Ports (negative port will reverse it!)
 
-    4,      // IMU Port
+    3,      // IMU Port
     3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     375);   // Wheel RPM = cartridge * (motor gear / wheel gear
 
@@ -58,9 +58,9 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+     {"Red Front\n\nRedfront auton", RedFront},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
-      {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
       {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
       {"Swing Turn\n\nSwing in an 'S' curve", swing_example},
       {"Motion Chaining\n\nDrive forward, turn, and come back, but blend everything together :D", motion_chaining},
@@ -77,6 +77,7 @@ void initialize() {
   // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
+  pros::delay(500);  // Stop the user from doing anything while the IMU calibrates
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
 
@@ -114,8 +115,7 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
-  chassis.pid_targets_reset();                // Resets PID targets to 0
-  chassis.drive_imu_reset();                  // Reset gyro position to 0
+  chassis.pid_targets_reset();                // Resets PID targets to 0                 
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
@@ -242,12 +242,13 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  toggle.move_relative(180, 110);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
     double current_position = lift.get_position();
-
+    
     //chassis.opcontrol_tank();  // Tank control
     chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
     // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
@@ -259,7 +260,7 @@ void opcontrol() {
     // . . .
     claw.button_toggle(master.get_digital(DIGITAL_L1));
 
-    if (master.get_digital(DIGITAL_R1) && current_position < 14500.0) {
+    if (master.get_digital(DIGITAL_R1) && current_position < 7250.0) {
       lift.move(110);
     } else if (master.get_digital(DIGITAL_R2) && current_position > 0.0) {
       lift.move(-110);
@@ -268,7 +269,7 @@ void opcontrol() {
     }
     
     if (master.get_digital(DIGITAL_UP)) {
-      toggle.move_absolute(180,110);
+      toggle.move_relative(990,110);
     }
   }
 
