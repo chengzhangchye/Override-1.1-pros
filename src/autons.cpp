@@ -169,7 +169,7 @@ void RLBR() {
   chassis.pid_drive_set(-15_in,DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
   lift.move_absolute(0, LIFT_SPEED);
-  chassis.pid_turn_set(-225_deg, TURN_SPEED);
+  chassis.pid_turn_set(135_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
   chassis.pid_drive_set(22_in, 65, true);
   chassis.pid_wait();
