@@ -58,7 +58,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-     {"Red Right\n\nRedRight auton", RedRight},
+      {"RRBL\n\nRed Right + Blue Left auton", RRBL},
+      {"RLBR\n\nRed Left + Blue Right auton", RLBR},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
@@ -276,7 +277,7 @@ void opcontrol() {
     }
     
     if (master.get_digital(DIGITAL_UP)) {
-      toggle.move_relative(990,110);
+      toggle.move_relative(985,110);
     }
     pros::delay(ez::util::DELAY_TIME);
   }

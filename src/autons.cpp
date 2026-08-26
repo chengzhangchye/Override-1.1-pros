@@ -9,6 +9,7 @@
 const int DRIVE_SPEED = 110;
 const int TURN_SPEED = 110;
 const int SWING_SPEED = 110;
+const int LIFT_SPEED = 110;
 
 ///
 // Constants
@@ -87,13 +88,11 @@ void turn_example() {
 ///
 // Combining Turn + Drive
 ///
-void RedRight() {
-  // Set the current physical direction of the robot to be evaluated as 90 degrees
-  chassis.imu.set_heading(90); 
+void RRBL() {
   claw.set(true);
   chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  lift.move_absolute(800, 110);
+  lift.move_absolute(600, LIFT_SPEED);
   chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
   chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
@@ -102,24 +101,84 @@ void RedRight() {
   chassis.pid_wait();
   claw.set(false);
   pros::delay(500);
-  chassis.pid_drive_set(-4_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(-3_in, DRIVE_SPEED, true);
   chassis.pid_wait_quick_chain();
-  lift.move_absolute(0,110);
-  chassis.pid_turn_set(225_deg, TURN_SPEED);
+  lift.move_absolute(0, LIFT_SPEED);
+  chassis.pid_turn_set(-35_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(15_in, DRIVE_SPEED, true);
-  chassis.pid_wait_quick_chain();
-  chassis.pid_turn_set(180_deg,TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(0.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(22_in, 65, true);
   chassis.pid_wait();
   claw.set(true);
-  lift.move_absolute(1000, 110);
+  lift.move_absolute(2000, LIFT_SPEED);
+  chassis.pid_drive_set(2_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(180_deg,TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(22_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  claw.set(false);
+  pros::delay(500);
+  chassis.pid_drive_set(-15_in,DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+  lift.move_absolute(0, LIFT_SPEED);
   chassis.pid_turn_set(225_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(-15_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(22_in, 65, true);
+  chassis.pid_wait();
+  claw.set(true);
+  lift.move_absolute(3000, LIFT_SPEED);
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_turn_set(270_deg, TURN_SPEED);
+  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  claw.set(false);
+  
+
+}
+
+void RLBR() {
+  claw.set(true);
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  lift.move_absolute(600, LIFT_SPEED);
+  chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(7.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  claw.set(false);
+  pros::delay(500);
+  chassis.pid_drive_set(-3_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  lift.move_absolute(0, LIFT_SPEED);
+  chassis.pid_turn_set(35_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(22_in, 65, true);
+  chassis.pid_wait();
+  claw.set(true);
+  lift.move_absolute(2000, LIFT_SPEED);
+  chassis.pid_drive_set(2_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(180_deg,TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(22_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  claw.set(false);
+  pros::delay(500);
+  chassis.pid_drive_set(-15_in,DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+  lift.move_absolute(0, LIFT_SPEED);
+  chassis.pid_turn_set(-225_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(22_in, 65, true);
+  chassis.pid_wait();
+  claw.set(true);
+  lift.move_absolute(3000, LIFT_SPEED);
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_wait();
   claw.set(false);
   
 
