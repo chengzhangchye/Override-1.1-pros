@@ -58,8 +58,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"RRBL\n\nRed Right + Blue Left auton", RRBL},
-      {"RLBR\n\nRed Left + Blue Right auton", RLBR},
+      {"RRBR\n\nRed Right + Blue Right auton", RRBR},
+      {"RLBL\n\nRed Left + Blue Leftt auton", RLBL},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
@@ -80,6 +80,12 @@ void initialize() {
   ez::as::initialize();
   pros::delay(500);  // Stop the user from doing anything while the IMU calibrates
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
+  
+  if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+    ez::as::page_down();
+  } else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+    ez::as::page_up();
+  }
 }
 
 /**
@@ -275,6 +281,7 @@ void opcontrol() {
     } else {
       lift.move(0);
     }
+
     
     if (master.get_digital(DIGITAL_UP)) {
       toggle.move_relative(985,110);

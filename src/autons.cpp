@@ -88,12 +88,14 @@ void turn_example() {
 ///
 // Combining Turn + Drive
 ///
-void RRBL() {
+void RRBR() {
+  toggle.move_relative(985,110);
+  pros::delay(500);
   claw.set(true);
   chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
   lift.move_absolute(600, LIFT_SPEED);
-  chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(8.5_in, DRIVE_SPEED, true);
   chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
@@ -118,30 +120,36 @@ void RRBL() {
   chassis.pid_wait();
   claw.set(false);
   pros::delay(500);
-  chassis.pid_drive_set(-15_in,DRIVE_SPEED);
+  chassis.pid_drive_set(-11.5_in,DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
   lift.move_absolute(0, LIFT_SPEED);
   chassis.pid_turn_set(225_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(22_in, 65, true);
+  chassis.pid_drive_set(26_in, 50, true);
   chassis.pid_wait();
   claw.set(true);
   lift.move_absolute(3000, LIFT_SPEED);
+  pros::delay(500);
+  chassis.pid_drive_set(3.5_in, 50, true);
+  chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_drive_set(23_in, 50);
   chassis.pid_wait();
   claw.set(false);
-  
-
+  pros::delay(100);
+  chassis.pid_drive_set(-5_in,DRIVE_SPEED); 
+  chassis.pid_wait();
 }
 
-void RLBR() {
+void RLBL() {
+  toggle.move_relative(985,110);
+  pros::delay(500);
   claw.set(true);
   chassis.pid_turn_set(45_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
   lift.move_absolute(600, LIFT_SPEED);
-  chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(8.5_in, DRIVE_SPEED, true);
   chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
@@ -160,30 +168,33 @@ void RLBR() {
   lift.move_absolute(2000, LIFT_SPEED);
   chassis.pid_drive_set(2_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_turn_set(180_deg,TURN_SPEED);
+  chassis.pid_turn_set(-180_deg,TURN_SPEED);
   chassis.pid_wait_quick_chain();
   chassis.pid_drive_set(22_in, DRIVE_SPEED);
   chassis.pid_wait();
   claw.set(false);
   pros::delay(500);
-  chassis.pid_drive_set(-15_in,DRIVE_SPEED);
+  chassis.pid_drive_set(-11.5_in,DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
   lift.move_absolute(0, LIFT_SPEED);
-  chassis.pid_turn_set(135_deg, TURN_SPEED);
+  chassis.pid_turn_set(-225_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(22_in, 65, true);
+  chassis.pid_drive_set(26_in, 50, true);
   chassis.pid_wait();
   claw.set(true);
   lift.move_absolute(3000, LIFT_SPEED);
+  pros::delay(500);
+  chassis.pid_drive_set(3.5_in, 50, true);
+  chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_drive_set(23_in, 50);
   chassis.pid_wait();
   claw.set(false);
-  
-
+  pros::delay(100);
+  chassis.pid_drive_set(-5_in,DRIVE_SPEED);
+  chassis.pid_wait();
 }
-
 ///
 // Wait Until and Changing Max Speed
 ///

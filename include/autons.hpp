@@ -4,8 +4,8 @@ void default_constants();
 
 void drive_example();
 void turn_example();
-void RRBL();
-void RLBR();
+void RRBR();
+void RLBL();
 void wait_until_change_speed();
 void swing_example();
 void motion_chaining();
