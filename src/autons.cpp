@@ -6,7 +6,7 @@
 /////
 
 // These are out of 127
-const int DRIVE_SPEED = 110;
+const int DRIVE_SPEED = 105;
 const int TURN_SPEED = 110;
 const int SWING_SPEED = 110;
 const int LIFT_SPEED = 110;
@@ -89,17 +89,17 @@ void turn_example() {
 // Combining Turn + Drive
 ///
 void RRBR() {
-  toggle.move_relative(985,110);
+  toggle.move_relative(480,110);
   pros::delay(500);
   claw.set(true);
   chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
   lift.move_absolute(600, LIFT_SPEED);
-  chassis.pid_drive_set(8.5_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
   chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(7.5_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(7_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   claw.set(false);
   pros::delay(500);
@@ -116,7 +116,7 @@ void RRBR() {
   chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(180_deg,TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(22_in, DRIVE_SPEED);
+  chassis.pid_drive_set(21.5_in, DRIVE_SPEED);
   chassis.pid_wait();
   claw.set(false);
   pros::delay(500);
@@ -134,26 +134,26 @@ void RRBR() {
   chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(23_in, 50);
+  chassis.pid_drive_set(22_in, 50);
   chassis.pid_wait();
   claw.set(false);
-  pros::delay(100);
+  pros::delay(500);
   chassis.pid_drive_set(-5_in,DRIVE_SPEED); 
   chassis.pid_wait();
 }
 
 void RLBL() {
-  toggle.move_relative(985,110);
+  toggle.move_relative(480,110);
   pros::delay(500);
   claw.set(true);
   chassis.pid_turn_set(45_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
   lift.move_absolute(600, LIFT_SPEED);
-  chassis.pid_drive_set(8.5_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
   chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(7.5_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(7_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   claw.set(false);
   pros::delay(500);
@@ -170,7 +170,7 @@ void RLBL() {
   chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(-180_deg,TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(22_in, DRIVE_SPEED);
+  chassis.pid_drive_set(21.5_in, DRIVE_SPEED);
   chassis.pid_wait();
   claw.set(false);
   pros::delay(500);
@@ -188,10 +188,10 @@ void RLBL() {
   chassis.pid_wait_quick_chain();
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
-  chassis.pid_drive_set(23_in, 50);
+  chassis.pid_drive_set(22_in, 50);
   chassis.pid_wait();
   claw.set(false);
-  pros::delay(100);
+  pros::delay(500);
   chassis.pid_drive_set(-5_in,DRIVE_SPEED);
   chassis.pid_wait();
 }
@@ -232,17 +232,17 @@ void swing_example() {
   // The third parameter is the speed of the moving side of the drive
   // The fourth parameter is the speed of the still side of the drive, this allows for wider arcs
 
-  chassis.pid_swing_set(ez::LEFT_SWING, 45_deg, SWING_SPEED, 45);
+  chassis.pid_swing_set(ez::LEFT_SWING, -45_deg, SWING_SPEED, 45);
   chassis.pid_wait();
 
-  chassis.pid_swing_set(ez::RIGHT_SWING, 0_deg, SWING_SPEED, 45);
-  chassis.pid_wait();
+  // chassis.pid_swing_set(ez::RIGHT_SWING, 0_deg, SWING_SPEED, 45);
+  // chassis.pid_wait();
 
-  chassis.pid_swing_set(ez::RIGHT_SWING, 45_deg, SWING_SPEED, 45);
-  chassis.pid_wait();
+  // chassis.pid_swing_set(ez::RIGHT_SWING, 45_deg, SWING_SPEED, 45);
+  // chassis.pid_wait();
 
-  chassis.pid_swing_set(ez::LEFT_SWING, 0_deg, SWING_SPEED, 45);
-  chassis.pid_wait();
+  // chassis.pid_swing_set(ez::LEFT_SWING, 0_deg, SWING_SPEED, 45);
+  // chassis.pid_wait();
 }
 
 ///
