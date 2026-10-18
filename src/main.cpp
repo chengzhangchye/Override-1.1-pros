@@ -8,8 +8,8 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {12, -16},     // Left Chassis Ports (negative port will reverse it!)
-    {7, -1},  // Right Chassis Ports (negative port will reverse it!)
+    {12, -11},     // Left Chassis Ports (negative port will reverse it!)
+    {-20, 19},  // Right Chassis Ports (negative port will reverse it!)
 
     3,      // IMU Port
     3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
@@ -284,9 +284,15 @@ void opcontrol() {
 
     
     if (master.get_digital(DIGITAL_UP)) {
-      toggle.move_relative(985,110);
+      toggle.move_relative(950,110);
     }
     pros::delay(ez::util::DELAY_TIME);
+
+    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+      ez::as::page_down();
+    } else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+      ez::as::page_up();
+    }
   }
   pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
 }
