@@ -80,7 +80,7 @@ void initialize() {
   ez::as::initialize();
   pros::delay(500);  // Stop the user from doing anything while the IMU calibrates
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
-  claw.set(true);  // Set claw to starting position
+  claw.set(false);  // Set claw to starting position
 }
 
 /**
@@ -251,6 +251,7 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  claw.set(false);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
@@ -266,6 +267,7 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
+    
     claw.button_toggle(master.get_digital(DIGITAL_L1));
 
     if (master.get_digital(DIGITAL_R1) && current_position < 7250.0) {
