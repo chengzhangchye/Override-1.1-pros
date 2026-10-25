@@ -60,6 +60,7 @@ void initialize() {
   ez::as::auton_selector.autons_add({
       {"RRBR\n\nRed Right + Blue Right auton", RRBR},
       {"RLBL\n\nRed Left + Blue Left auton", RLBL},
+      {"skills\n\nStart on RR", skills},
       // {"Drive\n\nDrive forward and come back", drive_example},
       // {"Turn\n\nTurn 3 times.", turn_example},
       // {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
