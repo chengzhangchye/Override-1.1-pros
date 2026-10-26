@@ -253,6 +253,7 @@ void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
   claw.set(false);
+  lift.move_absolute(600, 110);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
