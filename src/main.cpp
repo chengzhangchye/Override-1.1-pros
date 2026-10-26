@@ -281,7 +281,7 @@ void opcontrol() {
     }
 
     
-    if (master.get_digital(DIGITAL_UP)) {
+    if (master.get_digital_new_press(DIGITAL_UP)) {
       toggle.move_relative(480,110);
     }
     pros::delay(ez::util::DELAY_TIME);
