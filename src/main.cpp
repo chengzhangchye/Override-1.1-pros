@@ -45,7 +45,7 @@ void initialize() {
   // chassis.odom_tracker_left_set(&vert_tracker);
 
   // Configure your chassis controls
-  chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
+  chassis.opcontrol_curve_buttons_toggle(false);   // Enables modifying the controller curve with buttons on the joysticks
   chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
   chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
@@ -84,6 +84,29 @@ void initialize() {
   claw.set(false);  // Set claw to starting position
 }
 
+void controller_auton_update() {
+  static int last_page = -1;
+  static int last_print = -1000;
+  int now = pros::millis();
+  if (now - last_print < 100) return;
+
+  int page = ez::as::auton_selector.auton_page_current;
+  if (page == last_page && now - last_print < 1000) return;
+
+  std::string name = "---";
+  int count = ez::as::auton_selector.Autons.size();
+  if (page >= 0 && page < count) {
+    name = ez::as::auton_selector.Autons[page].Name;
+    name = name.substr(0, name.find('\n'));  // keep the short name only
+  }
+  std::string line = "Auto: " + name;
+  line.resize(15, ' ');  // controller rows are 15 chars; pad to clear old text
+  master.print(2, 0, "%s", line.c_str());  // row index 2 = 3rd row
+
+  last_page = page;
+  last_print = now;
+}
+
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
@@ -91,6 +114,10 @@ void initialize() {
  */
 void disabled() {
   // . . .
+  while (true) {
+    controller_auton_update();
+    pros::delay(ez::util::DELAY_TIME);
+  }
 }
 
 /**
@@ -258,6 +285,7 @@ void opcontrol() {
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
+    controller_auton_update(); 
     double current_position = lift.get_position();
     
     //chassis.opcontrol_tank();  // Tank control
@@ -273,16 +301,16 @@ void opcontrol() {
     claw.button_toggle(master.get_digital(DIGITAL_L1));
 
     if (master.get_digital(DIGITAL_R1) && current_position < 7250.0) {
-      lift.move(110);
+      lift.move(200);
     } else if (master.get_digital(DIGITAL_R2) && current_position > 0.0) {
-      lift.move(-110);
+      lift.move(-200);
     } else {
       lift.move(0);
     }
 
     
     if (master.get_digital_new_press(DIGITAL_L2)) {
-      toggle.move_relative(480,110);
+      toggle.move_relative(475,200);
     }
     pros::delay(ez::util::DELAY_TIME);
 
