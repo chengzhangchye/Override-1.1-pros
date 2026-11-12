@@ -11,7 +11,7 @@ ez::Drive chassis(
     {12, -11},     // Left Chassis Ports (negative port will reverse it!)
     {-20, 19},  // Right Chassis Ports (negative port will reverse it!)
 
-    3,      // IMU Port
+    4,      // IMU Port
     3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     375);   // Wheel RPM = cartridge * (motor gear / wheel gear
 
@@ -245,10 +245,11 @@ void ez_template_extras() {
       chassis.drive_brake_set(preference);
     }
 
+
     if (pros::lcd::read_buttons() & LCD_BTN_CENTER) {
         
         // Triggers and runs the currently displayed/selected autonomous routine
-        pros::delay(3000);
+        pros::delay(500);
         autonomous(); 
       }
 
@@ -300,7 +301,7 @@ void opcontrol() {
     
     claw.button_toggle(master.get_digital(DIGITAL_L1));
 
-    if (master.get_digital(DIGITAL_R1) && current_position < 7250.0) {
+    if (master.get_digital(DIGITAL_R1) && current_position < 5500.0) {
       lift.move(200);
     } else if (master.get_digital(DIGITAL_R2) && current_position > 0.0) {
       lift.move(-200);
@@ -310,7 +311,7 @@ void opcontrol() {
 
     
     if (master.get_digital_new_press(DIGITAL_L2)) {
-      toggle.move_relative(475,200);
+      toggle.move_relative(480,200);
     }
     pros::delay(ez::util::DELAY_TIME);
 

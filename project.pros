@@ -426,7 +426,7 @@
     "upload_options": {
       "description": "",
       "icon": "pizza",
-      "after": "run"
+      "after": "screen"
     },
     "use_early_access": false
   }
