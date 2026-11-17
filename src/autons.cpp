@@ -165,6 +165,22 @@ void RRBR() {
   claw.set(true);
 }
 
+void OPR() { 
+  toggle.move_relative(960,110);
+  pros::delay(500);
+  claw.set(false);
+  chassis.pid_turn_set(-45_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  lift.move_absolute(400, LIFT_SPEED);
+  chassis.pid_drive_set(8.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(7_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  claw.set(true);
+}
+
 void RLBL() {
   toggle.move_relative(960,110);
   pros::delay(500);
@@ -231,6 +247,22 @@ void RLBL() {
   pros::delay(100);
   claw.set(true);
 
+}
+
+void OPL() {
+  toggle.move_relative(960,110);
+  pros::delay(500);
+  claw.set(false);
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  lift.move_absolute(400, LIFT_SPEED);
+  chassis.pid_drive_set(8.2_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_drive_set(7.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  claw.set(true);
 }
 
 void skills(){

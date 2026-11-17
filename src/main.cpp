@@ -58,8 +58,10 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"RRBR\n\nRed Right + Blue Right auton", RRBR},
       {"RLBL\n\nRed Left + Blue Left auton", RLBL},
+      {"OPL\n\nOne pin Left", OPL},
+      {"RRBR\n\nRed Right + Blue Right auton", RRBR},
+      {"OPR\n\nOne pin Right", OPR},
       {"skills\n\nStart on RR", skills},
       // {"Drive\n\nDrive forward and come back", drive_example},
       // {"Turn\n\nTurn 3 times.", turn_example},
@@ -99,7 +101,7 @@ void controller_auton_update() {
     name = ez::as::auton_selector.Autons[page].Name;
     name = name.substr(0, name.find('\n'));  // keep the short name only
   }
-  std::string line = "Auto: " + name;
+  std::string line = "Auton: " + name;
   line.resize(15, ' ');  // controller rows are 15 chars; pad to clear old text
   master.print(2, 0, "%s", line.c_str());  // row index 2 = 3rd row
 
@@ -218,14 +220,50 @@ void ez_screen_task() {
 }
 pros::Task ezScreenTask(ez_screen_task);
 
+// Autonomous test runner for opcontrol extras
+static pros::Task* opcontrol_auton_task = nullptr;
+static bool opcontrol_auton_running = false;
+
+void stop_opcontrol_auton() {
+  if (opcontrol_auton_task != nullptr) {
+    opcontrol_auton_task->remove();
+    delete opcontrol_auton_task;
+    opcontrol_auton_task = nullptr;
+  }
+  opcontrol_auton_running = false;
+  chassis.pid_targets_reset();
+  chassis.drive_set(0, 0);
+  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  lift.move(0);
+}
+
+void start_opcontrol_auton() {
+  if (opcontrol_auton_running) return;
+  pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
+  opcontrol_auton_running = true;
+  opcontrol_auton_task = new pros::Task([preference]() {
+    autonomous();
+    chassis.drive_brake_set(preference);
+    chassis.pid_targets_reset();
+    chassis.drive_set(0, 0);
+    opcontrol_auton_running = false;
+  });
+}
+
 /**
  * Gives you some extras to run in your opcontrol:
  * - run your autonomous routine in opcontrol by pressing DOWN and B
  *   - to prevent this from accidentally happening at a competition, this
  *     is only enabled when you're not connected to competition control.
  * - gives you a GUI to change your PID values live by pressing X
+ * - press A to end a running autonomous test and return to driver control
  */
 void ez_template_extras() {
+  // End autonomous test early and return to driver control
+  if (opcontrol_auton_running && master.get_digital_new_press(DIGITAL_A)) {
+    stop_opcontrol_auton();
+  }
+
   // Only run this when not connected to a competition switch
   if (!pros::competition::is_connected()) {
     // PID Tuner
@@ -235,26 +273,23 @@ void ez_template_extras() {
     //  When enabled:
     //  * use A and Y to increment / decrement the constants
     //  * use the arrow keys to navigate the constants
-    if (master.get_digital_new_press(DIGITAL_X))
+    if (!opcontrol_auton_running && master.get_digital_new_press(DIGITAL_X))
       chassis.pid_tuner_toggle();
 
     // Trigger the selected autonomous routine
-    if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
-      pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
-      autonomous();
-      chassis.drive_brake_set(preference);
+    if (!opcontrol_auton_running && master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
+      start_opcontrol_auton();
     }
 
-
-    if (pros::lcd::read_buttons() & LCD_BTN_CENTER) {
-        
-        // Triggers and runs the currently displayed/selected autonomous routine
-        pros::delay(500);
-        autonomous(); 
-      }
+    if (!opcontrol_auton_running && (pros::lcd::read_buttons() & LCD_BTN_CENTER)) {
+      // Triggers and runs the currently displayed/selected autonomous routine
+      pros::delay(500);
+      start_opcontrol_auton();
+    }
 
     // Allow PID Tuner to iterate
-    chassis.pid_tuner_iterate();
+    if (!opcontrol_auton_running)
+      chassis.pid_tuner_iterate();
   }
 
   // Disable PID Tuner when connected to a comp switch
@@ -286,9 +321,16 @@ void opcontrol() {
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
-    controller_auton_update(); 
+    controller_auton_update();
+
+    // While an autonomous test is running, skip driver controls so it can run uninterrupted
+    if (opcontrol_auton_running) {
+      pros::delay(ez::util::DELAY_TIME);
+      continue;
+    }
+
     double current_position = lift.get_position();
-    
+
     //chassis.opcontrol_tank();  // Tank control
     chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
     // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
@@ -298,7 +340,7 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
-    
+
     claw.button_toggle(master.get_digital(DIGITAL_L1));
 
     if (master.get_digital(DIGITAL_R1) && current_position < 5500.0) {
@@ -309,17 +351,16 @@ void opcontrol() {
       lift.move(0);
     }
 
-    
     if (master.get_digital_new_press(DIGITAL_L2)) {
       toggle.move_relative(480,200);
     }
-    pros::delay(ez::util::DELAY_TIME);
 
     if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
       ez::as::page_down();
     } else if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
       ez::as::page_up();
     }
+
+    pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
-  pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
 }

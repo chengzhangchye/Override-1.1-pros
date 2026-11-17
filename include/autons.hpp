@@ -6,6 +6,8 @@ void drive_example();
 void turn_example();
 void RRBR();
 void RLBL();
+void OPR();
+void OPL();
 void skills();
 void wait_until_change_speed();
 void swing_example();
